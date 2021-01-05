@@ -1,0 +1,31 @@
+<li id="{{data.slug}}">
+    <p>
+        <span>
+            <a class="cursor" (click)="callDeleteFunction(data._id)"><i class="ionicons ion-android-delete"></i></a>
+            <a class="cursor" (click)="callUpdateFunction(data._id)"><i class="ionicons ion-edit"></i></a>
+            <a href="#/categories/{{data.slug}}">{{data.name}}</a>
+        </span>
+    </p>
+
+    <form role="form" (ngSbmit)="processForm(data._id)">
+        <div class="col-xs-12 input-group input-group-sm col-lg-6">
+            <input name="category" type="text" ng-model="formData[data._id].name"
+                class="form-control input-sm col-xs-3" placeholder="Add Child ..."/>
+            <input type="hidden" name="parent" ng-value="data._id"
+                ng-model="formData[data._id].parentCategory"
+                ng-init="formData[data._id].parentCategory=data._id"/>
+            <span class="input-group-btn">
+            <button class="btn btn-info btn-flat" type="submit">
+                <i class="fa fa-plus"></i> Add Child
+            </button>
+            </span>
+        </div>
+    </form>
+    <ul *ngFor="let data of data.subCategories">
+        <!-- <li> -->
+            <app-create-category [data]="data"></app-create-category>
+        <!-- </li> -->
+    </ul>
+</li>
+
+

@@ -1,0 +1,26 @@
+<section class="content-header">
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+        <li>Browse Categories</li>
+    </ol>
+
+    <a ng-show="user" class="btn btn-primary btn-xs" style="float: right"
+       href="/recommend-category">Recommend Category</a>
+</section>
+<div class="content-wrapper">
+    <div class="control">
+        <button class="btn btn-default btn-sm" onclick="Canvas.putOnCenter(true)"><i class="ionicons ion-android-locate"></i></button>
+    </div>
+
+    <div class="tree-container">
+        <div class="category-map" id="category-map">
+            <div *ngFor="let data of categories">
+                <app-tree-item [data] = "data" [collapseStatus] = "collapseStatus" (collapseChild) = (collapseParent($event))></app-tree-item>
+            </div>
+            <div class="center-category text-center" id="center" data-shape="Rectangle">
+                <h4>CourseMapper</h4>
+                A Mind Map Based Collaborative Course Annotation and Analytics Platform
+            </div>
+        </div>
+    </div>
+</div>
