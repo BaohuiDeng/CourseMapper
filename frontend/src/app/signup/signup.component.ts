@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {NgForm} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
+import{User} from '../user';
 
 @Component({
   selector: 'app-signup',
@@ -16,16 +17,20 @@ export class SignupComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  
+ userModel = new User('','','','')
 
   baseUrl:string = "http://localhost:3000/api";
   categories = [];
+
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'})
   };
-  processForm(form : NgForm){
-    this.http.post(this.baseUrl + "/accounts/signup", form.value).subscribe((data:any)=> {
+
+  processForm(){
+    console.log(this.userModel);
+    this.http.post(this.baseUrl + "/accounts/signup", this.userModel).subscribe((data:any)=> {
       this.toastr.success("Signup successfully");  
-      console.log(form.value) ;    
       this._router.navigate(['/accounts/login/#?referer=signUp&result=success'],{queryParams: { registered: 'true' } })
 
       //this.toastr.success('Please login using your new username and password', "Sign Up Success",{ timeOut:500})
