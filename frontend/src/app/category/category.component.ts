@@ -4,7 +4,7 @@ import {NgForm} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CreateCategoryComponent } from '../templates/create-category/create-category.component';
 import { data } from 'jquery';
-import {EditData} from '../services/editData';
+import {EditData} from '../services/dataModels';
 declare var $ :any;
 
 @Component({
@@ -32,6 +32,10 @@ editModel= new EditData("","");
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'})
   };
+  editData: { _id: any, name: string };
+
+
+
   ngOnInit(): void {
     this.http.get(this.baseUrl + "/categories").subscribe((data:any)=> {
       this.categories = data.categories;
@@ -39,11 +43,25 @@ editModel= new EditData("","");
   }
 
   processForm(form : NgForm){
-    this.http.post(this.baseUrl + "/categories", form.value).subscribe((data:any)=> {
+    // mark: httpOptions is not input in "post" request
+    this.http.post(this.baseUrl + "/categories", form.value).subscribe(
+    {
+      next:(data:any)=> {
       this.toastr.success("Successfully added");        
       this.ngOnInit();
-    });
-  }
+    },
+  
+    error:error=>{
+      (data:any)=> {error.errors = data.errors;
+      }}
+  
+    }
+    
+    
+    );
+  };
+
+
   deleteCategory(e: { catId: string; }){
     var confirm = window.confirm("Delete this category and its childs?");
     if(confirm){
@@ -57,8 +75,8 @@ editModel= new EditData("","");
         }}         
     });
     }
-  }
-  editData: { _id: any, name: string };
+  };
+  
   editCategory(e: { _id: any; name: string; }){
     
     // toggle edit mode    //-----------------------remaining to be used-------------------
@@ -78,9 +96,7 @@ editModel= new EditData("","");
     $('#editCategoryModal').modal('show');
 
     console.log(this.editData);
-    console.log(this.editData._id);
-    console.log(this.editData.name);
-   
+    
 
   };
 
