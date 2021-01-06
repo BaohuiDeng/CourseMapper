@@ -17,7 +17,11 @@
                     <!-- <error-block messages="errors"></error-block> -->
 
                     <div>
+<<<<<<< HEAD
                         <form #newCategory="ngForm" (ngSubmit)="processForm(newCategory)" id="rootCategory">
+=======
+                        <form #newCategory="ngForm" (ngSubmit)="processForm(newCategory)">
+>>>>>>> new
                             <div class="col-xs-6 input-group input-group-sm">
                                 <input type="text" name="name" class="form-control input-sm col-xs-3"
                                     placeholder="Add New Category ..." ngModel />
@@ -43,7 +47,11 @@
                                         <app-create-category 
                                         [data]="category" 
                                         (deleteInChild)=(deleteCategory($event))
+<<<<<<< HEAD
                                         (updateInChild)=(editCategory($event))
+=======
+                                        (updateInChild)=(editCategory($event)) 
+>>>>>>> new
                                         ></app-create-category>
                                     </ul>
                                 </td>
@@ -73,14 +81,26 @@
 
                                     <div class="box-body no-border">
 
+<<<<<<< HEAD
                                         <form role="form" #cat="ngForm" (ngSubmit)="saveEditCategory(editCategoryForm)"  
                                             name="editCategoryForm"> 
                                             <!-- deleted $valid and .$setDirty(0)          ng-model="editData.name"-->
+=======
+                                        <form role="form" (ngSubmit)="saveEditCategory(editCategoryForm)"  
+                                            name="editCategoryForm"> 
+                                            <!-- deleted $valid and .$setDirty(0)-->
+
+
+>>>>>>> new
                                             <div class="control-group">
 
                                                 <div class="controls">
                                                     <input type="text" id="name" name="name" placeholder=""
+<<<<<<< HEAD
                                                         class="form-control ng-untouched ng-pristine ng-valid" [(ngModel)]="editModel.name"  required
+=======
+                                                        class="form-control ng-untouched ng-pristine ng-valid" ng-model="editData.name" required
+>>>>>>> new
                                                         ng-required="true">
                                                 </div>
                                             </div>

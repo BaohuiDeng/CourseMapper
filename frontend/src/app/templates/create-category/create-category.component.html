@@ -2,12 +2,21 @@
     <p>
         <span>
             <a class="cursor" (click)="callDeleteFunction(data._id)"><i class="ionicons ion-android-delete"></i></a>
+<<<<<<< HEAD
             <a class="cursor" (click)="callUpdateFunction(data)"><i class="ionicons ion-edit"></i></a>
             <a href="#/categories/{{data.slug}}">{{data.name}}</a>
         </span>
     </p>
     <!-- processForm(data._id) -->
     <form role="form" #newSubCategory="ngForm" (ngSbmit)="callAddFunction(data)">
+=======
+            <a class="cursor" (click)="callUpdateFunction(data._id)"><i class="ionicons ion-edit"></i></a>
+            <a href="#/categories/{{data.slug}}">{{data.name}}</a>
+        </span>
+    </p>
+
+    <form role="form" (ngSbmit)="processForm(data._id)">
+>>>>>>> new
         <div class="col-xs-12 input-group input-group-sm col-lg-6">
             <input name="category" type="text" ng-model="formData[data._id].name"
                 class="form-control input-sm col-xs-3" placeholder="Add Child ..."/>
@@ -15,9 +24,15 @@
                 ng-model="formData[data._id].parentCategory"
                 ng-init="formData[data._id].parentCategory=data._id"/>
             <span class="input-group-btn">
+<<<<<<< HEAD
             <button class="btn btn-info btn-flat" type="submit" >
                 <i class="fa fa-plus"></i> Add Child
             </button> 
+=======
+            <button class="btn btn-info btn-flat" type="submit">
+                <i class="fa fa-plus"></i> Add Child
+            </button>
+>>>>>>> new
             </span>
         </div>
     </form>

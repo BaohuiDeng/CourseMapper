@@ -13,6 +13,8 @@ import { CreateCategoryComponent } from './templates/create-category/create-cate
 import { FormsModule,FormBuilder,FormGroup } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { CourseComponent } from './course/course.component';
+import { SignupComponent } from './signup/signup.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { CourseComponent } from './course/course.component';
     NavbarComponent,
     CategoryComponent,
     CreateCategoryComponent,
-    CourseComponent
+    CourseComponent,
+    SignupComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
