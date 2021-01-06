@@ -31,6 +31,13 @@ function Leave(jQEl, fromCenter) {
             top: top + "px"
         });
     };
+
+    self.getNewPosition = function (w, h) {
+        var left = w / 2 + ((self.fromCenter.x - self.w / 2)  );
+        var top = h / 2 + ((self.fromCenter.y - self.h / 2)  );
+
+        return {x: left, y: top}
+    }
 }
 var Tree = {
     center: null,
@@ -38,10 +45,13 @@ var Tree = {
 
     init: function (w, h) {
         var self = this;
+        self.w = w;
+        self.h = h;
+
         self.center = new Leave($('.center-category'), {x: 0, y: 0});
         self.center.init(w, h);
         $('.w').each(function () {
-            var xFromRoot = $(this).children(".xy").val().split(",")[0];
+            var xFromRoot = $(this).children(".xy").val().split(",")[0];// use array
             var yFromRoot = $(this).children(".xy").val().split(",")[1];
             var leave = new Leave($(this), {x: parseInt(xFromRoot), y: parseInt(yFromRoot)});
             leave.init(w, h);
@@ -52,7 +62,8 @@ var Tree = {
 
     onWindowResize: function (w, h) {
         var self = this;
-
+        self.w = w;
+        self.h = h;
         self.center.onWindowResize(w, h);
         for (var i in self.leaves) {
             var el = self.leaves[i];

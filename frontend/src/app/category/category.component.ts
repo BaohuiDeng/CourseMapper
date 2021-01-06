@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {NgForm} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CreateCategoryComponent } from '../templates/create-category/create-category.component';
+import { data } from 'jquery';
 
 declare var $ :any;
 
@@ -12,8 +13,7 @@ declare var $ :any;
   styleUrls: ['./category.component.css']
 })
 export class CategoryComponent implements OnInit {
-  editData: { _id: any; name: any; };
-  editMode=false;
+ 
   
 
 
@@ -25,6 +25,7 @@ export class CategoryComponent implements OnInit {
   
   @ViewChild(CreateCategoryComponent) viewChild: CreateCategoryComponent;
   
+  editMode=false;
   
   baseUrl:string = "http://localhost:3000/api";
   categories = [];
@@ -57,8 +58,9 @@ export class CategoryComponent implements OnInit {
     });
     }
   }
-
-  editCategory(e: { _id: any; name: any; }){
+  editData: { _id: any, name: string };
+  editCategory(e: { _id: any; name: string; }){
+    
     // toggle edit mode    //-----------------------remaining to be used-------------------
     if(this.editMode){
         this.editMode = false;
@@ -71,14 +73,26 @@ export class CategoryComponent implements OnInit {
         name: e.name,
       
     };
-  
-      $('#editCategoryModal').modal('show');
+    JSON.stringify(this.editData);
+    $('#editCategoryModal').modal('show');
+
+    console.log(this.editData);
+    console.log(this.editData._id);
+    console.log(this.editData.name);
+   
+
   };
+
+  
 // isValid if(!isValid)  return;
   saveEditCategory = function(data: any){
    
-       
-    this.http.put( this.baseUrl + "/category/"+"5fa175101ad79f18b600473e","").subscribe(
+    // this.editData = {
+    //   _id: "5fed9cdcdf57d211a5af9927",
+    //   name: "Super",
+    // };
+
+    this.http.put( this.baseUrl + "/category/"+this.editData._id,this.editData).subscribe(
       {
         next: (data:any)=> {
           this.toastr.success("Category edited");  

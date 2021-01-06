@@ -185,10 +185,10 @@ router.put('/category/:category/positionFromRoot', function (req, res, next) {
  */
 router.put('/category/:categoryId', function (req, res, next) {
     // check for user rights, only admin can edit cats positions on the homepage
-    if (!req.user || (req.user && req.user.role != 'admin')) {
-        res.status(401).send('Unauthorized');
-        return;
-    }
+    // if (!req.user || (req.user && req.user.role != 'admin')) {
+    //     res.status(401).send('Unauthorized');
+    //     return;
+    // }
 
     try {
         req.params.categoryId = mongoose.Types.ObjectId(req.params.categoryId);

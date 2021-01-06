@@ -10,7 +10,7 @@ export class CreateCategoryComponent implements OnInit {
   constructor() { }
   @Input() data: {};
   @Output() deleteInChild = new EventEmitter<any>();
-  @Output() updateInChild = new EventEmitter<any>();
+  @Output() updateInChild = new EventEmitter<object>();
   baseUrl:string = "http://localhost:3000/api";
 
   ngOnInit(): void {
@@ -19,7 +19,8 @@ export class CreateCategoryComponent implements OnInit {
       this.deleteInChild.emit({catId:catId});
   }
   callUpdateFunction(data: any) {
-      this.updateInChild.emit({data:data});
+      this.updateInChild.emit(data);
+      console.log(data)
   }
 
   

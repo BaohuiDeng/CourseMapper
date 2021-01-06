@@ -75,14 +75,15 @@
 
                                         <form role="form" (ngSubmit)="saveEditCategory(editCategoryForm)"  
                                             name="editCategoryForm"> 
-                                            <!-- deleted $valid and .$setDirty(0)-->
+                                            <!-- deleted $valid and .$setDirty(0)          ng-model="editData.name"-->
+                                             
 
 
                                             <div class="control-group">
 
                                                 <div class="controls">
                                                     <input type="text" id="name" name="name" placeholder=""
-                                                        class="form-control ng-untouched ng-pristine ng-valid" ng-model="editData.name" required
+                                                        class="form-control ng-untouched ng-pristine ng-valid" [(ngModel)]="this.editData.name"  required
                                                         ng-required="true">
                                                 </div>
                                             </div>
