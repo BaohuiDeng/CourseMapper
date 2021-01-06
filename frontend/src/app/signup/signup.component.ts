@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {NgForm} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
-import{User} from '../user';
+import {User} from '../user';
 
 @Component({
   selector: 'app-signup',
@@ -12,8 +12,11 @@ import{User} from '../user';
 })
 export class SignupComponent implements OnInit {
 
-  constructor(   private http: HttpClient, 
-    private toastr: ToastrService,private _router: Router) { }
+  constructor(   
+    private http: HttpClient, 
+    private toastr: ToastrService,
+    private router: Router
+    ) { }
 
   ngOnInit(): void {
   }
@@ -21,7 +24,6 @@ export class SignupComponent implements OnInit {
  userModel = new User('','','','')
 
   baseUrl:string = "http://localhost:3000/api";
-  categories = [];
 
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'})
@@ -29,14 +31,26 @@ export class SignupComponent implements OnInit {
 
   processForm(){
     console.log(this.userModel);
-    this.http.post(this.baseUrl + "/accounts/signup", this.userModel).subscribe((data:any)=> {
-      this.toastr.success("Signup successfully");  
-      this._router.navigate(['/accounts/login/#?referer=signUp&result=success'],{queryParams: { registered: 'true' } })
+    this.http.post(this.baseUrl + "/accounts/signup", this.userModel).subscribe
+    ({
+      next:(data:any)=> {
+      
+      console.log(this.toastr);
+      //this.ngOnInit();
 
+      //this.toastr.success("Signup successfully");  
+      this.router.navigate(['/accounts/login/#?referer=signUp&result=success'],{queryParams: { registered: 'true' } })
+      this.toastr.success("Please login using your new username and password");        
+
+      }, 
+       error:error=>{        
+           (data:any)=> {error.errors = data.errors;        
+            }}    
       //this.toastr.success('Please login using your new username and password', "Sign Up Success",{ timeOut:500})
       //this.ngOnInit();
 
     }
+   
  
     );
   }

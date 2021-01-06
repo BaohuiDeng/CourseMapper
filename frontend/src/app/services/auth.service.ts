@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
-
+import {LoginData} from '../navbar/loginData';
 declare var $: any;
 declare var transformRequest: any;
 
@@ -15,7 +15,9 @@ export class AuthService {
     showLoginModal = false;
     isLoggedIn = false;
     hasTriedToLogin = false;
-    loginData={};
+    loginData = new LoginData('','');
+
+    //loginData={};
     baseUrl:string = "http://localhost:3000/api";
     httpOptions = {
         headers: new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'}),
@@ -60,7 +62,7 @@ export class AuthService {
     login(loginData, successCallback, errorCallback) {
         var self = this;
        // var d = transformRequest(loginData);
-        this.http.post(this.baseUrl +'/accounts/login',this.httpOptions).subscribe({
+        this.http.post(this.baseUrl +'/accounts/login',this.loginData).subscribe({
             next:(data:any)=>{ 
                 if (data.result) {
                     //$rootScope.user = data.user;

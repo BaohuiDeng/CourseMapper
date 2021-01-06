@@ -202,62 +202,80 @@
                     <ul class="dropdown-menu">
                         <li>
                             <div class="box-body no-border">
-                                <form #loginData="ngForm" (ngSubmit)="login(loginData)" novalidate>
+                              
+                              
+                                <form #heroForm="ngForm" (ngSubmit)="login()" novalidate>
                                     <fieldset>
-                                        <div class="control-group" ng-class="{ 'has-error' : loginForm.username.$invalid && !loginForm.username.$pristine }">
+                                      
                                             <!-- Username -->
                                             <label class="control-label" for="username">Username</label>
-                                
-                                            <div class="controls">
-                                                <input type="text" id="username" name="username" placeholder=""
-                                                       class="form-control" ngModel
-                                                       required ng-required="true"
-                                                        >
-                                
-                                                <p ng-show="loginForm.username.$invalid && !loginForm.username.$pristine" class="help-block">Username is
-                                                    required.</p>
-                                
-                                            </div>
-                                        </div>
-                                
-                                        <div class="control-group" ng-class="{ 'has-error' : loginForm.password.$invalid && !loginForm.password.$pristine }">
-                                            <!-- Password-->
-                                            <label class="control-label" for="password">Password</label>
-                                
-                                            <div class="controls">
-                                                <input type="password" id="password" name="password" placeholder=""
-                                                       class="form-control" ngModel
-                                                       required ng-required="true"
-                                                        >
-                                
-                                                <p ng-show="loginForm.password.$invalid && !loginForm.password.$pristine" class="help-block">Password is
-                                                    required.</p>
-                                
-                                            </div>
-                                        </div>
-                                
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" value="yes" name="rememberMe" ngModel
-                                                       ng-checked="rememberMe"> Remember me
-                                            </label>
-                                
-                                            <p class="help-block"></p>
-                                        </div>
-                                
-                                        <div class="control-group">
+                                        
+                                    <input type="text" id="username" 
+                                            class="form-control"
+                                            [(ngModel)]="loginData.username" 
+                                            name="username"
+                                            #username="ngModel"
+                                            required ng-required="true">
+                                    <p [hidden]="username.valid || username.pristine"
+                                        class=" alert alert-danger">Username is
+                                        required.</p>
+        
+                            <!-- </div> -->
+        
+                            <!-- </div> -->
+        
+                            
+                                <!-- Password-->
+                                <label class="control-label" for="password">Password</label>
+                                <!-- <div class="controls"
+                                        ng-class="{ 'has-error' : signUpForm.password.$invalid && !signUpForm.password.$pristine }"> -->
+                                    <input 
+        
+                                    type="password" id="passwordOriginal"
+                                            class="form-control"
+                                            [(ngModel)]="loginData.password" 
+                                            #password="ngModel"
+                                            required minlength="4" ng-required="true"   
+                                            name="password"
+        
+                                    >
+                                    
+        
+                                    <p [hidden]="password.valid || password.pristine || password.errors.minlength"
+                                    class=" alert alert-danger">Password is invalid.</p>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="yes" name="rememberMe" ngModel
+                                                    ng-checked="rememberMe"> Remember me
+                                        </label>
+                            
+                                        <p class="help-block"></p>
+                                    </div>
+                                    <div class="control-group">
                                         <error-block ng-show="errors.length > 0" messages="errors"></error-block>
                                         </div>
+                                        <!-- </div> -->
+                    
+                                        <!-- </div> -->
+                                        <br>
+                    
+                    
                                         <div class="control-group">
                                             <!-- Button -->
                                             <div class="controls">
-                                                <button class="btn btn-primary btn-block">Login <spinner show="isLoading"></spinner></button>
+                                                <button type="submit" class="btn btn-primary btn-block" >Login
+                                                    <!-- <spinner show="isLoading"></spinner> -->
+                                                </button>
+                                                <!-- <error-block ng-show="errors.length > 0" messages="errors"></error-block> -->
                                             </div>
                                         </div>
-                                
                                         <a href="/accounts/forgot-password">Forgot Password</a>
+
                                     </fieldset>
-                                </form><!-- <% include formLogin %> -->
+                                    
+                                </form>
+                              
+                                <!-- <% include formLogin %> -->
                             </div>
                         </li>
                     </ul>
@@ -277,7 +295,8 @@
                         <img class="user-image" alt="User Image" ng-show="user.image" ng-cloak/>
 
                         <i ng-hide="user" class="fa fa-refresh fa-spin"></i>
-                        <!-- <span ng-show="user.username && !user.displayName" class="hidden-xs">{{user.username | capitalize:true}}</span> -->
+                        <!-- <span [hidden]="loginData.username && !loginData.displayName" class="hidden-xs">{{loginData.username | uppercasse}}</span> -->
+                        <!-- <span>{{loginData.username | uppercase }}</span> -->
                         <span ng-show="user.username && !user.displayName" class="hidden-xs"></span>
                         <!-- <span ng-show="user.displayName" class="hidden-xs">{{user.displayName | capitalize:true}}</span> -->
                         <span ng-show="user.displayName" class="hidden-xs"></span>
