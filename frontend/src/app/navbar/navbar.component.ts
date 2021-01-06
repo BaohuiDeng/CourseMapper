@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-import { Component, OnInit } from '@angular/core';
-=======
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {NgForm} from '@angular/forms';
@@ -8,7 +5,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
 import {AuthService} from '../services/auth.service';
 import {LoginData} from '../navbar/loginData';
->>>>>>> new
 
 @Component({
   selector: 'app-navbar',
@@ -16,10 +12,6 @@ import {LoginData} from '../navbar/loginData';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-<<<<<<< HEAD
-
-  constructor() { }
-=======
   rememberMe = false;
   errors = [];
   user = null;
@@ -36,14 +28,10 @@ export class NavbarComponent implements OnInit {
     private toastr: ToastrService,
     private _router: Router,
     private authService : AuthService) { }
->>>>>>> new
 
   ngOnInit(): void {
   }
 
-<<<<<<< HEAD
-}
-=======
   loginData = new LoginData( '', '')
 
   baseUrl:string = "http://localhost:3000/api";
@@ -108,4 +96,3 @@ export class NavbarComponent implements OnInit {
   }
 
   
->>>>>>> new

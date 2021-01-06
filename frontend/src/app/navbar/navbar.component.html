@@ -202,8 +202,6 @@
                     <ul class="dropdown-menu">
                         <li>
                             <div class="box-body no-border">
-<<<<<<< HEAD
-=======
                               
                               
                                 <form #heroForm="ngForm" (ngSubmit)="login()" novalidate>
@@ -254,7 +252,7 @@
                                         <p class="help-block"></p>
                                     </div>
                                     <div class="control-group">
-                                        <error-block ng-show="errors.length > 0" messages="errors"></error-block>
+                                        <!-- <error-block ng-show="errors.length > 0" messages="errors"></error-block> -->
                                         </div>
                                         <!-- </div> -->
                     
@@ -277,7 +275,6 @@
                                     
                                 </form>
                               
->>>>>>> new
                                 <!-- <% include formLogin %> -->
                             </div>
                         </li>
@@ -298,12 +295,8 @@
                         <img class="user-image" alt="User Image" ng-show="user.image" ng-cloak/>
 
                         <i ng-hide="user" class="fa fa-refresh fa-spin"></i>
-<<<<<<< HEAD
-                        <!-- <span ng-show="user.username && !user.displayName" class="hidden-xs">{{user.username | capitalize:true}}</span> -->
-=======
                         <!-- <span [hidden]="loginData.username && !loginData.displayName" class="hidden-xs">{{loginData.username | uppercasse}}</span> -->
                         <!-- <span>{{loginData.username | uppercase }}</span> -->
->>>>>>> new
                         <span ng-show="user.username && !user.displayName" class="hidden-xs"></span>
                         <!-- <span ng-show="user.displayName" class="hidden-xs">{{user.displayName | capitalize:true}}</span> -->
                         <span ng-show="user.displayName" class="hidden-xs"></span>
