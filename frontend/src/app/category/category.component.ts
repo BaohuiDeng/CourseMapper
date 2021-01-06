@@ -4,7 +4,7 @@ import {NgForm} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CreateCategoryComponent } from '../templates/create-category/create-category.component';
 import { data } from 'jquery';
-
+import {EditData} from '../services/editData';
 declare var $ :any;
 
 @Component({
@@ -15,7 +15,7 @@ declare var $ :any;
 export class CategoryComponent implements OnInit {
  
   
-
+editModel= new EditData("","");
 
 
   constructor(
@@ -73,6 +73,7 @@ export class CategoryComponent implements OnInit {
         name: e.name,
       
     };
+    this.editModel=this.editData
     JSON.stringify(this.editData);
     $('#editCategoryModal').modal('show');
 
