@@ -50,6 +50,7 @@ To add a link, use brackets to add the link text, then between parentheses add t
 ## How to run the project
 
 Start writing here. keep one line before and after.
+<br>
 In the backend,please run `npm install` 
 <br>
 In the frontend please run  `npm install -g @angular/cli`  then run `ng serve`
