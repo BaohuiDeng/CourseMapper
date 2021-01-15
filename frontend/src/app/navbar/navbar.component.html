@@ -195,9 +195,9 @@
 
                 <!-- Messages: style can be found in dropdown.less-->
                 <!-- <li class="dropdown tasks-menu" ng-cloak ng-hide="user"> -->
-                <li class="dropdown tasks-menu">
-                    <a style="cursor: pointer" class="dropdown-toggle" data-toggle="dropdown">
-                        <b>Login</b>
+                <li *ngIf = "!(user1$ | async) as user1" class="dropdown tasks-menu">
+                    <a  style="cursor: pointer" class="dropdown-toggle" data-toggle="dropdown">
+                        <b>Login </b>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
@@ -208,6 +208,8 @@
                                     <fieldset>
                                       
                                             <!-- Username -->
+                                            <div class="form-group"
+                                            [class.has-error] = "username.touched && username.invalid">
                                             <label class="control-label" for="username">Username</label>
                                         
                                     <input type="text" id="username" 
@@ -216,9 +218,16 @@
                                             name="username"
                                             #username="ngModel"
                                             required ng-required="true">
-                                    <p [hidden]="username.valid || username.pristine"
+                                            <span class="help-block"
+                                            *ngIf="username.touched && username.errors?.required"
+                                            >
+                                                Username is required
+                                            </span>
+                                           
+                                            </div>         
+                                    <!-- <p [hidden]="username.valid || username.pristine"
                                         class=" alert alert-danger">Username is
-                                        required.</p>
+                                        required.</p> -->
         
                             <!-- </div> -->
         
@@ -226,6 +235,8 @@
         
                             
                                 <!-- Password-->
+                                <div class="form-group"
+                                [class.has-error] = "password.touched && password.invalid">
                                 <label class="control-label" for="password">Password</label>
                                 <!-- <div class="controls"
                                         ng-class="{ 'has-error' : signUpForm.password.$invalid && !signUpForm.password.$pristine }"> -->
@@ -240,9 +251,14 @@
         
                                     >
                                     
-        
-                                    <p [hidden]="password.valid || password.pristine || password.errors.minlength"
-                                    class=" alert alert-danger">Password is invalid.</p>
+       <span class="help-block"
+                    *ngIf="password.touched && password.errors?.required "
+                    >
+                        Password is required
+                    </span>    
+                    </div>
+                                    <!-- <p [hidden]="password.valid || password.pristine || password.errors.minlength"
+                                    class=" alert alert-danger">Password is invalid.</p> --> 
                                     <div class="checkbox">
                                         <label>
                                             <input type="checkbox" value="yes" name="rememberMe" ngModel
@@ -252,7 +268,7 @@
                                         <p class="help-block"></p>
                                     </div>
                                     <div class="control-group">
-                                        <!-- <error-block ng-show="errors.length > 0" messages="errors"></error-block> -->
+                                        <error-block ng-show="errors.length > 0" messages="errors"></error-block>
                                         </div>
                                         <!-- </div> -->
                     
@@ -261,6 +277,9 @@
                     
                     
                                         <div class="control-group">
+                                            <div class="alert alert-danger" *ngIf="errorMsg">
+                                                {{errorMsg}}
+                                            </div>
                                             <!-- Button -->
                                             <div class="controls">
                                                 <button type="submit" class="btn btn-primary btn-block" >Login
@@ -281,25 +300,20 @@
                     </ul>
                 </li>
                 <!-- <li ng-cloak ng-hide="user"> -->
-                <li>
+                <li *ngIf = "!(user1$ | async) as user1">
                     <a href="/accounts/signup">
-                        <b>Sign Up</b>
+                        <b>Signup</b>
                     </a>
                 </li>
 
-                <li class="dropdown user user-menu notifications-menu" ng-show="user" ng-cloak>
+                <li class="dropdown user user-menu notifications-menu" *ngIf="(user1$ | async) as user1">
                     <a href="" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="/assets/img/admin-lte/user2-160x160.png" class="user-image" alt="User Image"
                              ng-hide="user.image" ng-cloak/>
-                        <!-- <img ng-src="{{user.image}}" class="user-image" alt="User Image" ng-show="user.image" ng-cloak/> -->
-                        <img class="user-image" alt="User Image" ng-show="user.image" ng-cloak/>
+                        <img src="{{Image}}" class="user-image" alt="User Image" *ngIf="(Image$ | async) as Image" />
 
-                        <i ng-hide="user" class="fa fa-refresh fa-spin"></i>
-                        <!-- <span [hidden]="loginData.username && !loginData.displayName" class="hidden-xs">{{loginData.username | uppercasse}}</span> -->
-                        <!-- <span>{{loginData.username | uppercase }}</span> -->
-                        <span ng-show="user.username && !user.displayName" class="hidden-xs"></span>
-                        <!-- <span ng-show="user.displayName" class="hidden-xs">{{user.displayName | capitalize:true}}</span> -->
-                        <span ng-show="user.displayName" class="hidden-xs"></span>
+                        <i *ngIf="!(user1$ | async) as user1" class="fa fa-refresh fa-spin"></i>
+                        <span *ngIf="(UserName$ | async ) as UserName"  class="hidden-xs">{{UserName}}</span>
 
                     </a>
                     <ul class="dropdown-menu">
@@ -308,13 +322,13 @@
                             <ul class="menu">
                                 <li>
                                     <!-- <a href="/accounts/{{user.username}}"> -->
-                                    <a href="">
+                                    <a >
                                         <i class="ionicons ion-gear-a"></i> My Account
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        <li class="footer"><a href="/accounts/logout"><i class="ionicons ion-log-out"></i> Log Out </a>
+                        <li class="footer"><a (click)="logout()"><i class="ionicons ion-log-out"></i> Log Out </a>
                         </li>
                     </ul>
                 </li>

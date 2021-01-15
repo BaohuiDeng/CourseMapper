@@ -4,7 +4,7 @@ import {NgForm} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
 import {User} from '../user';
-
+import {AuthService} from '../services/auth.service';
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -15,13 +15,18 @@ export class SignupComponent implements OnInit {
   constructor(   
     private http: HttpClient, 
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private authService:AuthService
     ) { }
 
   ngOnInit(): void {
   }
   
  userModel = new User('','','','')
+ errors=[];
+ isLoading = false;
+ errorMsg = '';
+ errorTransfer='';
 
   baseUrl:string = "http://localhost:3000/api";
 
@@ -29,29 +34,20 @@ export class SignupComponent implements OnInit {
     headers: new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'})
   };
 
-  processForm(){
+  
+  onSubmit(){
     console.log(this.userModel);
-    this.http.post(this.baseUrl + "/accounts/signup", this.userModel).subscribe
-    ({
-      next:(data:any)=> {
-      
-      console.log(this.toastr);
-      //this.ngOnInit();
+    this.authService.signup(this.userModel)
+     .subscribe(
+       data=>{
+        this.toastr.success("Please login using your new username and password","Signup successfully");  
+        this.router.navigate(['/accounts/login/#?referer=signUp&result=success'])      
+       console.log('Success',data)},
+       error => 
+      // this.errorMsg = error.statusText
+      this.errorMsg = error
 
-      //this.toastr.success("Signup successfully");  
-      this.router.navigate(['/accounts/login/#?referer=signUp&result=success'],{queryParams: { registered: 'true' } })
-      this.toastr.success("Please login using your new username and password");        
 
-      }, 
-       error:error=>{        
-           (data:any)=> {error.errors = data.errors;        
-            }}    
-      //this.toastr.success('Please login using your new username and password', "Sign Up Success",{ timeOut:500})
-      //this.ngOnInit();
-
-    }
-   
- 
-    );
+     )
   }
 }

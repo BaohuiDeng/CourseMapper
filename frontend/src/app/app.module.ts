@@ -18,6 +18,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { CourseComponent } from './course/course.component';
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
+import { ProfileComponent } from './profile/profile.component';
 //import { GetCategoriesService} from './services/get-categories.service';
 
 @NgModule({
@@ -32,6 +33,7 @@ import { LoginComponent } from './login/login.component';
     CourseComponent,
     SignupComponent,
     LoginComponent,
+    ProfileComponent,
     
   ],
   imports: [

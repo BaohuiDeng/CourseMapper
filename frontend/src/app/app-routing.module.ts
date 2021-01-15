@@ -4,6 +4,7 @@ import { CategoryComponent } from './category/category.component';
 import { CourseComponent } from './course/course.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
+import { ProfileComponent } from './profile/profile.component';
 import {SignupComponent} from './signup/signup.component';
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -11,6 +12,7 @@ const routes: Routes = [
   {path: 'courses/category/:slug', component: CourseComponent},
   {path :'accounts/signup',component:SignupComponent},
   {path:'accounts/login/#?referer=signUp&result=success',component:LoginComponent},
+  {path:'accounts/:username',component:ProfileComponent}
 ];
 
 @NgModule({

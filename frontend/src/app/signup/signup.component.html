@@ -1,135 +1,146 @@
-<div class="content-wrapper">
+<div class="wrapper">
 
-    <!-- Main content -->
-    <section class="content">
-        <div class="row row-centered">
-            <div class="col-xs-12 col-md-6 col-centered" >
-                <div class="box no-border">
-                    <div class="box-body no-border">
-
-            <form #heroForm="ngForm" (ngSubmit)="processForm()" novalidate>
-                <fieldset>
-                    <div id="legend">
-                        <h2>User Registration Form</h2>
-                    </div>
-                    <div class="control-group">
-                        <!-- Username -->
-                        <label class="control-label" for="username">Username</label>
-                        <p class="help-block">Username can contain any letters or numbers, without
-                            spaces</p>
-                            <!-- <div>{{userModel.username}}</div> -->
-                        <!-- <div class="controls"
-                                ng-class="{ 'has-error' : signUpForm.username.$invalid && !signUpForm.username.$pristine }"> -->
-
-                            <input type="text" id="username" 
-                                    class="form-control"
-                                    [(ngModel)]="userModel.username" 
-                                   name="username"
-                                    #username="ngModel"
-                                    required ng-required="true">
-                            <p [hidden]="username.valid || username.pristine"
-                                class=" alert alert-danger">Username is
-                                required.</p>
-
+    <div class="content-wrapper">
+    
+        <!-- Main content -->
+        <section class="content">
+            <div class="row row-centered">
+                <div class="col-xs-12 col-md-6 col-centered" >
+                    <div class="box no-border">
+                        <div class="box-body no-border">
+    
+                <form #heroForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+                    <fieldset>
+                        <div id="legend">
+                            <h2>User Registration Form</h2>
                         </div>
-                    <!-- </div> -->
-
-                    <div class="control-group">
-                        <p></p>
-                        <!-- E-mail -->
-                        <label class="control-label" for="email">E-mail</label>
-<!-- 
-                        <div class="controls"
-                                ng-class="{ 'has-error' : signUpForm.email.$invalid && !signUpForm.email.$pristine }"> -->
-                            <p class="help-block">Please provide your E-mail</p>
-                            <input 
-                                    type="email" id="email" 
-                                    class="form-control"
-                                    [(ngModel)]="userModel.email" 
-                                    name="email"
-                                    #email="ngModel"
-                                    required ng-required="true"       
-                            >
-                            <p [hidden]="email.valid || email.pristine"
-                            class=" alert alert-danger">Email is
-                                required.</p>
+                    
+                        <label for ="username" class="control-label">Username</label>
+                        <p class="help-block">Username can contain any letters or numbers, without spaces</p>
+                        <div class="form-group"
+                        [class.has-error] = "username.touched && username.invalid">
+                        <input 
+                        type="username" id="username"
+                        class="form-control"
+                        placeholder=""
+                        [(ngModel)]="userModel.username" 
+                        #username="ngModel"
+                        required 
+                         name="username" 
+                        >
+                        <span class="help-block"
+                        *ngIf="username.touched && username.errors?.required"
+                        >
+                            Username is required
+                        </span>
+                       
                         </div>
-                    <!-- </div> -->
-
-                    <div class="control-group">
-                        <p></p>
-                        <!-- Password-->
-                        <label class="control-label" for="password">Password</label>
+                        <!-- </div> -->
+    
+                        
+                        <label for ="email" class="control-label">Email</label>
+                        <p class="help-block">Please provide your E-mail</p>
+                        <div class="form-group"
+                        [class.has-error] = "email.touched && email.invalid">
+                        <input 
+                        type="email" id="email"
+                        class="form-control"
+                        placeholder=""
+                        [(ngModel)]="userModel.email" 
+                        #email="ngModel"
+                        required 
+                         name="email"
+                        >
+                        <span class="help-block"
+                        *ngIf="email.touched && email.errors?.required"
+                        >
+                            Email is required
+                        </span>
+                       
+                        </div>
+                        <!-- </div> -->
+    
+                       
+                        <label for ="password" class="control-label">Password</label>
                         <p class="help-block">Password should be at least 4 characters</p>
-                        <!-- <div class="controls"
-                                ng-class="{ 'has-error' : signUpForm.password.$invalid && !signUpForm.password.$pristine }"> -->
-                            <input 
-
-                            type="password" id="passwordOriginal"
-                                    class="form-control"
-                                    [(ngModel)]="userModel.password" 
-                                    #password="ngModel"
-                                    required minlength="4" ng-required="true"   
-                                    name="password"
-
-                            >
-                         
-
-                            <p [hidden]="password.valid || password.pristine || password.errors.minlength"
-                            class=" alert alert-danger">Password is invalid.</p>
+                        <div class="form-group"
+                        [class.has-error] = "password.touched && password.invalid">
+                        <input 
+                        type="password" id="password"
+                        class="form-control"
+                        placeholder=""
+                        [(ngModel)]="userModel.password" 
+                        #password="ngModel"
+                        required minlength="4"
+                         name="password"
+                        >
+                        <span class="help-block"
+                        *ngIf="password.touched && password.errors?.required "
+                        >
+                            Password is required
+                        </span>
+                       
                         </div>
-                    <!-- </div> -->
-
-                    <div class="control-group">
-                        <p></p>
-                        <!-- Password -->
-                        <label class="control-label" for="password_confirm">Password (Confirm)</label>
-
-                        <p class="help-block">Please confirm your password</p>
-                        <!-- <div class="controls"
-                                ng-class="{ 'has-error' : signUpForm.password_confirm.$invalid && !signUpForm.password_confirm.$pristine }"> -->
+    
+                        <!-- </div> -->
+                           
+                            <label for ="password_confirm" class="control-label">Password(Confirm)</label>
+                            <p class="help-block">Please confirm your password</p>
+                            <div class="form-group"
+                            [class.has-error] = "password_confirm.touched && password_confirm.invalid">
                             <input 
-                            
                             type="password" id="password_confirm"
                             class="form-control"
                             placeholder=""
                             [(ngModel)]="userModel.password_confirm" 
                             #password_confirm="ngModel"
-                            required validateEqual="password" 
-                            ng-required="true"
+                            required 
+                            appConfirmEqualValidator="password" required
                              name="password_confirm"
                             >
-
-                            <p [hidden]="password_confirm.valid || password_confirm.pristine" 
-                            class="alert alert-danger">The confirmed password is not matching with your password.</p>
+                            <span class="help-block"
+                            *ngIf="password_confirm.touched && password_confirm.errors?.required"
+                            >
+                                Confirm Password is required
+                            </span>
+                            <span class="help-block"
+                            *ngIf="password_confirm.touched && password_confirm.errors?.notEqual 
+                            && !password_confirm.errors?.required"
+                            >
+                            Password and Confirm password does not match
+                        </span>
+                            </div>
+                        <!-- </div> -->
+                        <br>
+    
+                        <div class="control-group">
+                            <p>We respect your privacy. Please read <a href="/privacy" target="_blank" >here</a> to learn more about our Privacy Policy.</p>
                         </div>
-                    <!-- </div> -->
-                    <br>
-
-                    <div class="control-group">
-                        <p>We respect your privacy. Please read <a href="/privacy" target="_blank" >here</a> to learn more about our Privacy Policy.</p>
-                    </div>
-
-                    <div class="control-group">
-                        <!-- Button -->
-                        <div class="controls">
-                            <button type="submit" class="btn btn-primary" >Register
-                                <!-- <spinner show="isLoading"></spinner> -->
-                            </button>
-                            <!-- <error-block ng-show="errors.length > 0" messages="errors"></error-block> -->
+    
+                        <div class="control-group">
+                            <!-- Button -->
+                            <div class="controls">
+                                <button type="submit" class="btn btn-primary" >Register
+                                    <!-- <spinner show="isLoading"></spinner> -->
+                                </button>
+                                <!-- <error-block ng-show="errors.length > 0" messages="errors"></error-block> -->
+                            </div>
+                            <div class="alert alert-danger" *ngIf="errorMsg">
+                                {{errorMsg}}
+                            </div>
                         </div>
-                    </div>
-                </fieldset>
-                
-            </form>
-
-
+                    </fieldset>
+                    
+                </form>
+    
+    
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-    </section>
-    <!-- /.content -->
-</div>
-<!-- /.content-wrapper -->
+    
+        </section>
+        <!-- /.content -->
+    </div>
+    </div>
+    <!-- /.content-wrapper -->
