@@ -29,11 +29,12 @@ Start writing here. keep one line before and after.
 ## Development Setup
 
 Start writing here. keep one line before and after.
-Prepairation: 
+Preparation: 
+```
 1.MongoDB
 2.Node 12.13.1
 3.Angular 10
-
+```
 
 To add a link, use brackets to add the link text, then between parentheses add the link. e.g. [CM 1.0](https://github.com/ude-soco/CourseMapper)
 
@@ -50,6 +51,7 @@ To add a link, use brackets to add the link text, then between parentheses add t
 
 Start writing here. keep one line before and after.
 In the backend,please run `npm install` 
+<br>
 In the frontend please run  `npm install -g @angular/cli`  then run `ng serve`
 
 
