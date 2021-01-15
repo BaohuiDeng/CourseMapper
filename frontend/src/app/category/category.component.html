@@ -42,8 +42,10 @@
                                     <ul *ngFor="let category of categories">
                                         <app-create-category 
                                         [data]="category" 
-                                        (deleteInChild)=(deleteCategory($event))
+                                        
+                                        (deleteInChild)="deleteCategory($event)"
                                         (updateInChild)=(editCategory($event))
+                                        
                                         ></app-create-category>
                                     </ul>
                                 </td>
@@ -80,7 +82,7 @@
 
                                                 <div class="controls">
                                                     <input type="text" id="name" name="name" placeholder=""
-                                                        class="form-control ng-untouched ng-pristine ng-valid" [(ngModel)]="editModel.name"  required
+                                                        class="form-control ng-untouched ng-pristine ng-valid" [(ngModel)]="editedValue.editModel.name"  required
                                                         ng-required="true">
                                                 </div>
                                             </div>

@@ -1,10 +1,11 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {NgForm} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CreateCategoryComponent } from '../templates/create-category/create-category.component';
 import { data } from 'jquery';
-import {EditData} from '../services/dataModels';
+import { ShowEditedValueService } from '../services/show-edited-value.service';
+import { GetCategoriesService } from '../services/get-categories.service';
 declare var $ :any;
 
 @Component({
@@ -13,18 +14,7 @@ declare var $ :any;
   styleUrls: ['./category.component.css']
 })
 export class CategoryComponent implements OnInit {
- 
-  
-editModel= new EditData("","");
 
-
-  constructor(
-    private http: HttpClient, 
-    private toastr: ToastrService
-    ) { }
-  
-  @ViewChild(CreateCategoryComponent) viewChild: CreateCategoryComponent;
-  
   editMode=false;
   
   baseUrl:string = "http://localhost:3000/api";
@@ -33,32 +23,46 @@ editModel= new EditData("","");
     headers: new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'})
   };
   editData: { _id: any, name: string };
+  
+  
 
 
-
+  constructor(
+    private http: HttpClient, 
+    private toastr: ToastrService,
+    public editedValue:ShowEditedValueService,
+    private categoryService:GetCategoriesService
+    ) { }
+  
+  @ViewChild(CreateCategoryComponent) viewChild: CreateCategoryComponent;
+  
   ngOnInit(): void {
-    this.http.get(this.baseUrl + "/categories").subscribe((data:any)=> {
-      this.categories = data.categories;
-    });
-  }
+      this.categoryService.cast.subscribe(categories=>this.categories=categories);
+      this.categoryService.refreshData();
+    //console.log(this.categories);
+  
+}
+  
+  // refreshPage( categoriesInChild: any[]){
+  //   this.categories=categoriesInChild;
+  // }
 
   processForm(form : NgForm){
     // mark: httpOptions is not input in "post" request
+    console.log(form.value);
     this.http.post(this.baseUrl + "/categories", form.value).subscribe(
     {
       next:(data:any)=> {
       this.toastr.success("Successfully added");        
-      this.ngOnInit();
+      //this.ngOnInit();
+      this.categoryService.refreshData();
     },
   
-    error:error=>{
-      (data:any)=> {error.errors = data.errors;
-      }}
+    error:error=>{(data:any)=> {error.errors = data.errors;}}
   
     }
     
-    
-    );
+);  
   };
 
 
@@ -68,7 +72,7 @@ editModel= new EditData("","");
       this.http.delete(this.baseUrl + "/category/" + e.catId).subscribe({
         next: (data:any)=> {
         this.toastr.success("Successfully deleted");        
-        this.ngOnInit();
+        this.categoryService.refreshData();
       },
       error:error=>{
         (data:any)=> {error.errors = data.errors;
@@ -91,8 +95,8 @@ editModel= new EditData("","");
         name: e.name,
       
     };
-    this.editModel=this.editData
-    JSON.stringify(this.editData);
+    this.editedValue.editModel=this.editData;
+    
     $('#editCategoryModal').modal('show');
 
     console.log(this.editData);
@@ -109,12 +113,12 @@ editModel= new EditData("","");
     //   name: "Super",
     // };
 
-    this.http.put( this.baseUrl + "/category/"+this.editData._id,this.editData).subscribe(
+    this.http.put( this.baseUrl + "/category/"+this.editedValue.editModel._id,this.editedValue.editModel).subscribe(
       {
         next: (data:any)=> {
           this.toastr.success("Category edited");  
           $('#editCategoryModal').modal('hide');      
-          this.ngOnInit();
+          this.categoryService.refreshData();
         },
         error:error=>{
           (data:any)=> {error.errors = data.errors;

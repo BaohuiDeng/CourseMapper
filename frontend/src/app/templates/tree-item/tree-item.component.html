@@ -29,5 +29,11 @@
     </ul>
 </div>
 <div *ngFor="let data of data.subCategories">
-    <app-tree-item [data]="data"></app-tree-item>
+    <app-tree-item 
+    [data]="data"
+    [collapseStatus] = "collapseStatus"
+    (collapseChild) = (collapseParent($event))
+    
+    ></app-tree-item>
+    <!-- {{data}} -->
 </div>

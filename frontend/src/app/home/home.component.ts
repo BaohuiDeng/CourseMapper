@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TreeItemComponent } from '../templates/tree-item/tree-item.component';
 import { CollapseService } from '../services/collapse.service';
+import { GetCategoriesService } from '../services/get-categories.service';
 declare var $: any;
 declare var jsPlumb: any;
 
@@ -147,7 +148,8 @@ var Container = {
         });
     }
 };
-var found = false;
+let found: boolean|object;
+ found = false;
 
 var i = 0;
 @Component({
@@ -171,11 +173,19 @@ export class HomeComponent implements OnInit {
     collapseStatus = {};
     donotInit = false;
 
-    constructor(private http: HttpClient, private collapseService:CollapseService) { }
+    constructor(
+        private http: HttpClient,
+        private collapseService:CollapseService,
+        private categoryService:GetCategoriesService
+        ) { }
     ngOnInit(): void {
-        this.http.get(this.baseUrl + "/categories").subscribe((data:any)=> {
-            this.categories = data.categories;
-        })
+        // this.http.get(this.baseUrl + "/categories").subscribe((data:any)=> {
+        //     this.categories = data.categories;
+
+        // })
+        this.categoryService.cast.subscribe(categories=>this.categories=categories);
+        this.categoryService.refreshData();
+
         Container.init();
         Canvas.init(window.innerWidth, window.innerHeight);
         $(window).resize(function () {
@@ -482,20 +492,27 @@ export class HomeComponent implements OnInit {
     }
     collapseParent(e){
         var el = e.el;
+        var isInit =e.isInit;
         var nodeId = el.substring(1);
 
         found = false;
         var pNode = this.findNode(this.categories, 'subCategories', '_id', nodeId);
+
         if (pNode) {
-            var hide = false;
-            hide = this.collapseService.toggle(nodeId);
+            let hide : number | boolean;
+            hide = false;
+            //hide = this.collapseService.toggle(nodeId);
+            if (isInit === true)
+            {hide = this.collapseService.isCollapsed(nodeId);}
+            else
+            { hide = this.collapseService.toggle(nodeId);}
 
             if (hide === false) {
                 this.collapseStatus[nodeId] = false;
                 $('#' + el).addClass('aborted');
                 this.collapseService.affectVisualCat(false, pNode, pNode.slug);
             }
-            else if (hide == true) {
+            else if (hide >= 0 ||hide == true) {
                 this.collapseStatus[nodeId] = true;
                 this.collapseService.affectVisualCat(true, pNode, pNode.slug);
                 $('#' + el).removeClass('aborted');

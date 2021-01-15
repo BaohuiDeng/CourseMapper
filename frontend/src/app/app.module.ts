@@ -11,10 +11,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { CategoryComponent } from './category/category.component';
 import { CreateCategoryComponent } from './templates/create-category/create-category.component';
 import { FormsModule,FormBuilder,FormGroup } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+
+
 import { CourseComponent } from './course/course.component';
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
+//import { GetCategoriesService} from './services/get-categories.service';
 
 @NgModule({
   declarations: [
@@ -27,15 +31,15 @@ import { LoginComponent } from './login/login.component';
     CreateCategoryComponent,
     CourseComponent,
     SignupComponent,
-    LoginComponent
+    LoginComponent,
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    
-    
+    BrowserAnimationsModule,
     ToastrModule.forRoot()
   ],
   providers: [],
