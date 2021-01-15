@@ -33,7 +33,7 @@ Preparation:
 ```
 1.MongoDB
 2.Node 12.13.1
-3.Angular 10
+3.Angular CLI 10.2.0
 ```
 
 To add a link, use brackets to add the link text, then between parentheses add the link. e.g. [CM 1.0](https://github.com/ude-soco/CourseMapper)
