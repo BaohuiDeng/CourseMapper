@@ -12,9 +12,9 @@ Start writing here. keep one line before and after.
 
 Start writing here. keep one line before and after.
 - Frontend
-    - Technologies
+    - Angular 10
 - Backend
-    - Technologies
+    - MongoDB, Express, Node.js
 
 <br>
 <br>
