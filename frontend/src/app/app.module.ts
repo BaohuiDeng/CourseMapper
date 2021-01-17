@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { QuillModule } from 'ngx-quill'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -10,7 +11,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CategoryComponent } from './category/category.component';
 import { CreateCategoryComponent } from './templates/create-category/create-category.component';
-import { FormsModule,FormBuilder,FormGroup } from '@angular/forms';
+import { FormsModule,FormBuilder,FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 
@@ -42,6 +43,8 @@ import { ProfileComponent } from './profile/profile.component';
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
+    QuillModule.forRoot(),
     ToastrModule.forRoot()
   ],
   providers: [],

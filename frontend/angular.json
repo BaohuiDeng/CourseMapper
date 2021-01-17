@@ -26,6 +26,9 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/quill/dist/quill.core.css",
+              "./node_modules/quill/dist/quill.snow.css",
               "src/assets/bower/bootstrap/dist/css/bootstrap.min.css",
               "src/assets/bower/bootstrap-timepicker/css/bootstrap-timepicker.min.css",
               "src/assets/bower/font-awesome/css/font-awesome.min.css",

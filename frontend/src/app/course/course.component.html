@@ -6,7 +6,7 @@
             <li class="active">Browse Courses</li>
             <li class="active">{{slug}}</li>
         </ol>
-        <a ng-show="user" class="btn btn-primary btn-xs" style="float: right" data-toggle="modal"
+        <a  class="btn btn-primary btn-xs" style="float: right" data-toggle="modal"
            data-target="#modalCreateCourse">Create A Course</a>
     </section>
     <!-- Main content -->
@@ -21,16 +21,19 @@
 
                     <div class="row">
                         <div class="col-md-12 filter">
-                            <h4 [hidden]="!(filterTags.length > 0)">Filtered By:</h4>
+                            <h4 *ngIf="filterTags.length > 0">Filtered By:</h4>
                             <span class="label label-primary" *ngFor="let tag of filterTags">
-                                <button class="btn btn-box-tool" (click)="removeFilter(tag)"><i class="fa fa-times"></i></button>
-                                {{tag.name}}
+                                <button class="btn btn-box-tool" ng-click="removeFilter(tag)"><i class="fa fa-times"></i></button>
+                                <!-- {{tag.name}} -->
                             </span>
                             <h4>Available Filters:</h4>
-                            <a class="label label-primary" *ngFor="let tag in availableTags" (click)="applyFilter(tag)">{{tag.name}}</a>
-                            <span class="label label-primary" [hidden]="!(availableTags.length == 0)">-</span>
+                            <a class="label label-primary" ng-repeat="tag in availableTags" ng-click="applyFilter(tag)">
+                                <!-- {{tag.name}} -->
+
+                            </a>
+                            <span class="label label-primary" ng-show="availableTags.length == 0">-</span>
                             <br> <br>
-                            <div class="col-xs-12 col-sm-4" [hidden]="!(courses.length > 1)">
+                            <div class="col-xs-12 col-sm-4" ng-show="courses.length > 1">
                                 <select id="orderTypeSelect"
                                         ng-model="orderType"
                                         ng-init="orderType = orderingOptions[0]"
@@ -71,11 +74,13 @@
                             <div class="form_hover" ng-mouseenter="getCourseAnalytics(c._id)">
                                 <div class="box box-primary peekCourse">
                                     <div class="box-header with-border">
-                                        <a href="/course/{{c.slug}}/#/cid/{{c._id}}"
-                                           class="box-title">{{c.name}}</a>
+                                        <a href="">
+                                        <!-- <a href="/course/{{c.slug}}/#/cid/{{c._id}}" -->
+                                           <!-- class="box-title">{{c.name}} -->
+                                        </a>
                                     </div>
                                     <div class="box-body" style="text-align: center">
-                                        <img class="course-picture" *ngIf="c.picture" ng-src="{{c.picture}}">
+                                        <!-- <img class="course-picture" *ngIf="c.picture" ng-src="{{c.picture}}"> -->
                                         <img ng-hide="c.picture" ng-src="/assets/img/default-tree.png">
                                     </div>
                                 </div>
@@ -84,8 +89,9 @@
                                     <div class="blur"></div>
                                     <div class="box box-primary caption-text">
                                         <div class="box-header with-border">
-                                            <a href="/course/{{c.slug}}/#/cid/{{c._id}}"
-                                               class="box-title">{{c.name}}</a>
+                                            <!-- <a href="/course/{{c.slug}}/#/cid/{{c._id}}"
+                                               class="box-title">{{c.name}}</a> -->
+                                               <a></a>
                                         </div>
                                         <div class="box-body course-list" style="height: 140px;">
                                             <div class="row">
@@ -104,9 +110,10 @@
 
                                         </div>
                                         <div class="box-footer">
-                                            <a class="btn btn-primary" href="/course/{{c.slug}}/#/cid/{{c._id}}"
+                                            <!-- <a class="btn btn-primary" href="/course/{{c.slug}}/#/cid/{{c._id}}"
                                                style="margin: 0 auto; display: block;"><i
-                                                        class=""></i> Go to course</a>
+                                                        class=""></i> Go to course</a> -->
+                                                        <a class="btn btn-primary">Go to course</a>
                                         </div>
                                     </div>
                                 </div>
@@ -131,7 +138,136 @@
                 <div class="row">
                     <div class="modal" id="modalCreateCourse" tabindex="-1" role="dialog"
                          aria-labelledby="modalCreateCourse" aria-hidden="true">
-                        <div ng-include="'/course/create/'"></div>
+                         
+
+<!-- Main content -->
+<section class="content">
+    <div class="row row-centered">
+        <div class="col-xs-12 col-md-5 col-centered">
+            <div class="box no-border" ng-controller="NewCourseController">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Create a new course under {{slug}}
+                        <!-- {{category.name}} -->
+                    </h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                    </div>
+                </div>
+
+                <div class="box-body no-border">
+                    <form  [formGroup]="editorForm" (ngSubmit)="createNewCourse()" novalidate>
+
+                    <!-- <form [formGroup]="editorForm" ng-submit="saveCourse(newCourseForm.$valid)" name="newCourseForm" novalidate> -->
+                        <fieldset>                               
+
+
+                            <div class="control-group">
+                                <label class="control-label" for="course">Course Name </label>
+
+                                <p class="help-block">Course name can contain any letters or numbers, minimum 3
+                                    characters</p>
+                                    <!-- <div class="form-group"
+                                    [class.has-error] = " coursename.touched && coursename.invalid"> -->
+                                <!-- <div class="controls"
+                                     ng-class="{ 'has-error' : newCourseForm.course.$invalid && !newCourseForm.$pristine }"> -->
+                                    <input type="text" id="name" name="name" placeholder="" class="form-control"
+                                    formControlName="name"                                           required minlength="3">
+                                           <!-- <span class="help-block"
+                                           *ngIf="coursename.touched && coursename.errors?.required"
+                                           > -->
+                                               Course name is required
+                                           <!-- </span> -->
+                                    <!-- <p ng-show="newCourseForm.course.$invalid && !newCourseForm.$pristine"
+                                       class="help-block">Course name is required.</p> -->
+                                </div>
+                            <!-- </div> -->
+
+                            <br>
+                            <div class="control-group">
+                                <label class="control-label" for="Small Description">Small Description </label>
+
+                                <p class="help-block">A small introduction words about this course</p>
+
+                                <div class="controls"
+                                     ng-class="{ 'has-error' : newCourseForm.smallDescription.$invalid && !newCourseForm.$pristine }">
+                                    <input type="text" id="course" name="smallDescription" placeholder=""
+                                           class="form-control"      formControlName="smallDescription"                                           required minlength="3">
+
+
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <p></p>
+                                <label class="control-label" for="description">Description </label>
+
+                                <p class="help-block">Description about this course</p>
+
+                                <div class="controls"
+                                     ng-class="{ 'has-error' : newCourseForm.description.$invalid && !newCourseForm.$pristine }">
+
+                                    <!-- <quill-editor id="description" name="description"
+                                         ng-model="course.description"
+                                         >
+                                    </quill-editor> -->
+
+   
+                                    <quill-editor [styles]="editorStyle" [modules]="config" (onContentChanged) ="maxLength($event)" formControlName="description"></quill-editor>
+
+                                  
+
+                                    <!-- <p ng-show="newCourseForm.description.$invalid && !newCourseForm.$pristine"
+                                       class="help-block">Please fill in a little bit of description about this
+                                        course.</p> -->
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <p></p>
+                                <label class="control-label" for="description">Tagging (optional)</label>
+
+                                <p class="help-block">Put some tags related to this course</p>
+
+                                <div class="controls">
+                                    <input type="text" id="tag" name="tag" placeholder="Add a tag"
+                                    class="form-control" 
+                                   >
+                         </div>
+
+                                </div>
+                            
+
+                            <div class="control-group">
+                                <p class="help-block"></p>
+
+                                <p class="help-block"></p>
+                                <br class="clear">
+
+                                <div class="box-footer">
+                                    <!-- <error-block ng-show="errors.length > 0" messages="errors"></error-block> -->
+                                    <!-- Button -->
+                                    <div class="controls">
+                                        <button name="submitButton" class="btn btn-primary btn-block"
+                                                ng-click="newCourseForm.$pristine=false">
+                                                <!-- {{editorContent}} -->
+                                            Create New Course
+                                            <!-- <spinner show="isLoading"></spinner> -->
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+                         
+                        <!-- <div ng-include="'/course/create/'"></div> -->
                     </div>
                 </div>
             </section>

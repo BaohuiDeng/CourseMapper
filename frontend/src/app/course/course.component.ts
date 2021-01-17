@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CourselistService } from '../services/courselist.service';
+import {FormControl, FormGroup} from '@angular/forms'
 
 @Component({
   selector: 'app-course',
@@ -23,10 +24,30 @@ export class CourseComponent implements OnInit {
   lastPage = false;
   force:any;
   filterTags = [];
+  editorForm: FormGroup;
+  editorContent: string;
+  config ={
+    toolbar:[
+      [{ 'font': [] }],
+      [{ 'size': ['small', false, 'large', 'huge'] }],
+      ['bold', 'italic', 'underline', 'strike'], 
+      [{ 'color': [] }, { 'background': [] }],          
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['clean']              ]
+  }
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private courseListService:CourselistService) {}
 
   ngOnInit() {
+
+    this.editorForm = new FormGroup({
+      "name":new FormControl(null),
+      "category":new FormControl(null),
+      "description":new FormControl(null),
+      "smallDescription":new FormControl(null)
+
+    })
+    
     this.route.params.subscribe(params => {
        this.slug = params['slug']; // (+) converts string 'id' to a number
     });
