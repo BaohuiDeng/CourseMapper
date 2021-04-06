@@ -133,3 +133,5 @@ videogular .am-scale {
     background: linear-gradient(to right, #798e97 0%, #73ace1 100%, #89c3eb 100%, #abd3ee 100%, #798e97 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ebf1f6', endColorstr='#d5ebfb', GradientType=1); /* IE6-9 */
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

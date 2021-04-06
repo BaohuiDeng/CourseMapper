@@ -14,11 +14,13 @@ import { CreateCategoryComponent } from './templates/create-category/create-cate
 import { FormsModule,FormBuilder,FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-
+import {MatChipsModule} from '@angular/material/chips';
+import {MatIconModule} from '@angular/material/icon';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 import { CourseComponent } from './course/course.component';
 import { SignupComponent } from './signup/signup.component';
-import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 //import { GetCategoriesService} from './services/get-categories.service';
 
@@ -33,7 +35,6 @@ import { ProfileComponent } from './profile/profile.component';
     CreateCategoryComponent,
     CourseComponent,
     SignupComponent,
-    LoginComponent,
     ProfileComponent,
     
   ],
@@ -45,7 +46,11 @@ import { ProfileComponent } from './profile/profile.component';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     QuillModule.forRoot(),
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    MatChipsModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatAutocompleteModule
   ],
   providers: [],
   bootstrap: [AppComponent]

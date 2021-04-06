@@ -5,6 +5,8 @@
             <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
             <li class="active">Browse Courses</li>
             <li class="active">{{slug}}</li>
+            <li class="active">{{categoryId}}</li>
+
         </ol>
         <a  class="btn btn-primary btn-xs" style="float: right" data-toggle="modal"
            data-target="#modalCreateCourse">Create A Course</a>
@@ -26,7 +28,7 @@
                                 <button class="btn btn-box-tool" ng-click="removeFilter(tag)"><i class="fa fa-times"></i></button>
                                 <!-- {{tag.name}} -->
                             </span>
-                            <h4>Available Filters:</h4>
+                            <h4>Available Filters: {{username}}</h4>
                             <a class="label label-primary" ng-repeat="tag in availableTags" ng-click="applyFilter(tag)">
                                 <!-- {{tag.name}} -->
 
@@ -161,7 +163,19 @@
 
                     <!-- <form [formGroup]="editorForm" ng-submit="saveCourse(newCourseForm.$valid)" name="newCourseForm" novalidate> -->
                         <fieldset>                               
+                            <!-- <div class="control-group">
+                                <label class="control-label" for="Small Description">Category </label>
 
+                                <p class="help-block">A small introduction words about this course</p>
+
+                                <div class="controls"
+                                     ng-class="{ 'has-error' : newCourseForm.smallDescription.$invalid && !newCourseForm.$pristine }">
+                                    <input type="text" id="course" name="category" placeholder=""
+                                           class="form-control"      formControlName="category"                                           required minlength="3">
+
+
+                                </div>
+                            </div> -->
 
                             <div class="control-group">
                                 <label class="control-label" for="course">Course Name </label>
@@ -174,6 +188,7 @@
                                      ng-class="{ 'has-error' : newCourseForm.course.$invalid && !newCourseForm.$pristine }"> -->
                                     <input type="text" id="name" name="name" placeholder="" class="form-control"
                                     formControlName="name"                                           required minlength="3">
+                                   
                                            <!-- <span class="help-block"
                                            *ngIf="coursename.touched && coursename.errors?.required"
                                            > -->
@@ -182,9 +197,11 @@
                                     <!-- <p ng-show="newCourseForm.course.$invalid && !newCourseForm.$pristine"
                                        class="help-block">Course name is required.</p> -->
                                 </div>
+
                             <!-- </div> -->
 
                             <br>
+     
                             <div class="control-group">
                                 <label class="control-label" for="Small Description">Small Description </label>
 
@@ -229,12 +246,26 @@
                                 <label class="control-label" for="description">Tagging (optional)</label>
 
                                 <p class="help-block">Put some tags related to this course</p>
-
-                                <div class="controls">
-                                    <input type="text" id="tag" name="tag" placeholder="Add a tag"
-                                    class="form-control" 
-                                   >
-                         </div>
+                                <mat-form-field class="example-chip-list">
+                                    <mat-chip-list #chipList aria-label="Fruit selection">
+                                      <mat-chip *ngFor="let fruit of fruits" [selectable]="selectable"
+                                               [removable]="removable" (removed)="remove(fruit)">
+                                        {{fruit.name}}
+                                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                      </mat-chip>
+                                      <input placeholder="Add a tag.."
+                                             [matChipInputFor]="chipList"
+                                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                             [matChipInputAddOnBlur]="addOnBlur"
+                                             (matChipInputTokenEnd)="add($event)">
+                                    </mat-chip-list>
+                                  </mat-form-field>
+                                  
+                                      
+                                    
+                                    <!-- <input type="text" id="tag" name="tag" placeholder="Add a tag"
+                                    class="form-control"  formControlName="tags"
+                                   > -->
 
                                 </div>
                             

@@ -154,7 +154,7 @@ catalog.prototype.enroll = function (error, userParam, courseParam, done, isEnro
 catalog.prototype.leave = function (error, userParam, courseParam, done) {
     this.enroll(error, userParam, courseParam, done, false);
 };
-
+//params = req.body from courses.js
 catalog.prototype.addCourse = function (error, params, success) {
     var self = this;
 
@@ -165,9 +165,9 @@ catalog.prototype.addCourse = function (error, params, success) {
     var course = new Course({
         name: params.name,
         createdBy: mongoose.Types.ObjectId(params.userId),
-        category: mongoose.Types.ObjectId(params.category),
+        category: mongoose.Types.ObjectId(params.category), 
         description: params.description,
-        smallDescription: params.smallDescription,
+       smallDescription: params.smallDescription,
         totalEnrollment: 0
     });
 
@@ -187,26 +187,26 @@ catalog.prototype.addCourse = function (error, params, success) {
                 {_id: course._id},
                 function (crs) {
                     // they giving us the tags in array of slug string.
-                    if (params.tagSlugs) {
-                        // insert all the tags, if it failed, means it is already there
+                    // if (params.tagSlugs) {
+                    //     // insert all the tags, if it failed, means it is already there
 
-                        var tc = new TagController();
-                        // get all the tags, we need the _ids
-                        for (var i in params.tagSlugs) {
-                            var tagParam = {
-                                name: params.tagSlugs[i],
-                                course: crs._id,
-                                category: params.category
-                            };
+                    //     var tc = new TagController();
+                    //     // get all the tags, we need the _ids
+                    //     for (var i in params.tagSlugs) {
+                    //         var tagParam = {
+                    //             name: params.tagSlugs[i],
+                    //             course: crs._id,
+                    //             category: params.category
+                    //         };
 
-                            tc.addCourseTag(function (err) {
-                                    if (err) debug(err);
-                                },
-                                tagParam,
-                                function () {
-                                });
-                        }
-                    }
+                    //         tc.addCourseTag(function (err) {
+                    //                 if (err) debug(err);
+                    //             },
+                    //             tagParam,
+                    //             function () {
+                    //             });
+                    //     }
+                    // }
 
                     success(crs);
                     Plugin.doAction('onAfterCourseCreated', crs);

@@ -371,11 +371,11 @@ router.post('/accounts/login',
             }
 
             if (!user) {
-
-                return res.status(401).json({
-                    result: false,
-                    errors: ['Wrong username or password']
-                });
+                    return res.redirect('/accounts/login')
+                // return res.status(401).json({
+                //     result: false,
+                //     errors: ['Wrong username or password']
+                // });
 
             }
 

@@ -46,3 +46,14 @@ export class NodeModel {
 
 
 }
+export class userModel {
+
+    constructor(
+        public username: string,
+        public image:any
+
+    ){ }
+
+   
+    
+}

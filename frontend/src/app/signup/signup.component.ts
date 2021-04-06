@@ -22,7 +22,7 @@ export class SignupComponent implements OnInit {
   ngOnInit(): void {
   }
   
- userModel = new User('','','','')
+ userModel = new User('','','','','','','','',false,'','','')
  errors=[];
  isLoading = false;
  errorMsg = '';

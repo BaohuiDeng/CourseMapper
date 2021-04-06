@@ -195,7 +195,7 @@
 
                 <!-- Messages: style can be found in dropdown.less-->
                 <!-- <li class="dropdown tasks-menu" ng-cloak ng-hide="user"> -->
-                <li *ngIf = "!(user1$ | async) as user1" class="dropdown tasks-menu">
+                <li *ngIf = "!user" class="dropdown tasks-menu">
                     <a  style="cursor: pointer" class="dropdown-toggle" data-toggle="dropdown">
                         <b>Login </b>
                     </a>
@@ -268,7 +268,7 @@
                                         <p class="help-block"></p>
                                     </div>
                                     <div class="control-group">
-                                        <error-block ng-show="errors.length > 0" messages="errors"></error-block>
+                                        <!-- <error-block ng-show="errors.length > 0" messages="errors"></error-block> -->
                                         </div>
                                         <!-- </div> -->
                     
@@ -300,20 +300,20 @@
                     </ul>
                 </li>
                 <!-- <li ng-cloak ng-hide="user"> -->
-                <li *ngIf = "!(user1$ | async) as user1">
+                <li *ngIf = "!user">
                     <a href="/accounts/signup">
                         <b>Signup</b>
                     </a>
                 </li>
 
-                <li class="dropdown user user-menu notifications-menu" *ngIf="(user1$ | async) as user1">
+                <li class="dropdown user user-menu notifications-menu" *ngIf="user">
                     <a href="" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="/assets/img/admin-lte/user2-160x160.png" class="user-image" alt="User Image"
                              ng-hide="user.image" ng-cloak/>
-                        <img src="{{Image}}" class="user-image" alt="User Image" *ngIf="(Image$ | async) as Image" />
+                        <img src="{{user.image}}" class="user-image" alt="User Image" *ngIf="user.image" />
 
-                        <i *ngIf="!(user1$ | async) as user1" class="fa fa-refresh fa-spin"></i>
-                        <span *ngIf="(UserName$ | async ) as UserName"  class="hidden-xs">{{UserName}}</span>
+                        <i *ngIf="!user" class="fa fa-refresh fa-spin"></i>
+                        <span *ngIf="user.username"  class="hidden-xs">{{user.username}}</span>
 
                     </a>
                     <ul class="dropdown-menu">

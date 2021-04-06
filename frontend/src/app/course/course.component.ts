@@ -1,8 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient,HttpHeaders, HttpErrorResponse, HttpResponse, HttpParams } from '@angular/common/http';
 import { CourselistService } from '../services/courselist.service';
 import {FormControl, FormGroup} from '@angular/forms'
+import {AuthService} from '../services/auth.service';
+import { Observable, Subscription } from 'rxjs';
+import {CoursesService} from '../services/courses.service'
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {MatChipInputEvent} from '@angular/material/chips';
+import { ViewChild , ElementRef} from '@angular/core'
+import {map, startWith} from 'rxjs/operators';
+import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
+
+
+export interface Fruit {
+  name: string;
+}
 
 @Component({
   selector: 'app-course',
@@ -13,7 +26,7 @@ export class CourseComponent implements OnInit {
 
   slug: string;
   error:any;
-  category:any;
+  category:any; 
   baseUrl:string = "http://localhost:3000/api";
   courseTags = [];
   availableTags = [];
@@ -25,7 +38,11 @@ export class CourseComponent implements OnInit {
   force:any;
   filterTags = [];
   editorForm: FormGroup;
+
   editorContent: string;
+  userId:string;
+  user=null;
+  categoryId:string;
   config ={
     toolbar:[
       [{ 'font': [] }],
@@ -35,22 +52,73 @@ export class CourseComponent implements OnInit {
       [{ 'list': 'ordered'}, { 'list': 'bullet' }],
       ['clean']              ]
   }
+  visible = true;
+  selectable = true;
+  removable = true;
+  fruitCtrl = new FormControl();
+  filteredFruits: Observable<string[]>;
+  // fruits: string[] = [''];
+  addOnBlur = true;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  fruits: Fruit[] = [];  
+  httpOptions = {
+    headers: new HttpHeaders({'Content-Type': 'application/json'}),
+    withCredentials:true
+  };
+  @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
+  @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private courseListService:CourselistService) {}
+  // fromObject:{
+  //   name:string,
+  //   category:string,
+  //   description: string,
+  //   smallDescription:string,
+  //   tags:string
+  // }
+
+
+  constructor(
+    private router:Router,
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private courseListService:CourselistService,
+    private authService:AuthService,
+    private CoursesService:CoursesService
+      
+      ) {
+        this.editorForm = new FormGroup({
+          "name":new FormControl(null),
+          "description":new FormControl(null),
+          "smallDescription":new FormControl(null),
+          //"tags": new FormControl(null),
+        })
+
+        this.authService.getUser()
+        .subscribe(
+          data=>{
+            console.log(data['user'])
+            this.user = data['user']
+          }
+        )
+
+    // this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
+    //   startWith(null),
+    //   map((fruit: string | null) => fruit ? this._filter(fruit) : this.allFruits.slice()));
+  }
+ 
 
   ngOnInit() {
+   
 
-    this.editorForm = new FormGroup({
-      "name":new FormControl(null),
-      "category":new FormControl(null),
-      "description":new FormControl(null),
-      "smallDescription":new FormControl(null)
+    
 
-    })
+  
     
     this.route.params.subscribe(params => {
        this.slug = params['slug']; // (+) converts string 'id' to a number
+
     });
+    
     this.http.get(this.baseUrl + '/category/' + this.slug).subscribe({
       next:(data:any)=>{
         this.category = data.category;
@@ -58,7 +126,7 @@ export class CourseComponent implements OnInit {
         this.http.get(this.baseUrl + "/category/" + this.category._id + '/courseTags').subscribe((data:any)=> {
           this.courseTags = data.courseTags;
           this.availableTags = data.courseTags;
-          this.initTagFromSearch();
+         // this.initTagFromSearch();
         })
       },
       error: error=>{
@@ -66,6 +134,82 @@ export class CourseComponent implements OnInit {
       }
     })
   }
+
+  // maxLength(e){
+  //   console.log(e)
+  // }
+ 
+
+  createNewCourse(){
+    console.log(this.editorForm.value)
+    console.log( this.editorForm.getRawValue()['name'])
+    console.log(this.fruits,typeof(this.fruits))
+    let body = {
+      name:this.editorForm.value.name,
+      category:this.category._id,
+      description:this.editorForm.value.description,
+      smallDescription:this.editorForm.value.smallDescription
+    }
+    //  let params = new HttpParams({
+    //   fromObject:   {
+    //     name:"hed",
+    //      category: "6001afa4f5437537f7ac3700",
+    //      description: "<div>TypeScript is an open-source language which builds on JavaScript, one of the world’s most used tools, by adding static type definitions.</div><div><br></div>",
+    //      smallDescription:"aefe",
+    //      tags:"lkdmflke"
+    //   }
+
+    //});
+      
+    //  this.http.post('http://localhost:3000/api/courses', body, this.httpOptions)
+    // .subscribe(data=>console.log(data),error=>console.log(error))
+
+   
+    
+
+  }
+
+ 
+
+
+
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    // Add our fruit
+    if ((value || '').trim()) {
+      this.fruits.push({name: value.trim()});
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+  }
+
+  remove(fruit: Fruit): void {
+    const index = this.fruits.indexOf(fruit);
+
+    if (index >= 0) {
+      this.fruits.splice(index, 1);
+    }
+  }
+
+
+  // selected(event: MatAutocompleteSelectedEvent): void {
+  //   this.fruits.push(event.option.viewValue);
+  //   this.fruitInput.nativeElement.value = '';
+  //   this.fruitCtrl.setValue(null);
+  // }
+
+  // private _filter(value: string): string[] {
+  //   const filterValue = value.toLowerCase();
+
+  //   return this.allFruits.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
+  // }
+
   initTagFromSearch() {
     // var tagSearch = $location.search();
     // if (tagSearch && tagSearch.tags) {

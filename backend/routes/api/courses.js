@@ -19,45 +19,50 @@ var await = require('asyncawait/await');
  * POST
  * create course
  */
-router.post('/courses',
-    function (req, res, next) {
-        if (!req.user) {
-            res.status(401).send('Unauthorized');
-        }
-        else {
-            var catalog = new Course();
-            req.body.userId = req.user._id;
+ router.post('/courses',
+ function (req, res, next) {
+     if (!req.user) {
+         res.status(401).send('Unauthorized');
+     }
+     else {
+         var catalog = new Course();
+         req.body.userId = req.user._id;
+        //  req.body.userId = "6065d8c1ef42d7048b430e66"
+      
+        //new variable
 
-            // format the tags data structure
-            if (req.body.tags) {
-                // because the data is in {text:the-tag} format. let's just get the values.
-                var tagSlugs = [];
-                var tTags = JSON.parse(req.body.tags);
-                for (var i in tTags) {
-                    tagSlugs.push(tTags[i]['text']);
-                }
-                req.body.tagSlugs = tagSlugs;
-            }
+         // format the tags data structure
+        //  if (req.body.tags) {
+        //      // because the data is in {text:the-tag} format. let's just get the values.
+        //      var tagSlugs = [];
+        //     // console.log(req.body.tags);
+        //      var tTags = JSON.parse(req.body.tags);
+        //      console.log(tTags);
+        //      for (var i in tTags) {
+        //          tagSlugs.push(tTags[i]['text']);
+        //      }
+        //      req.body.tagSlugs = tagSlugs;
+        //  }
 
-            catalog.addCourse(
-                function (err) {
-                    if (err.message.indexOf('duplicate key error index') > -1)
-                        helper.resReturn(helper.createError('Course with the same name is already exist.', 400), res);
-                    else
-                        helper.resReturn(err, res);
-                    //res.status(200).json({result: false, errors: [err.message]});
-                },
+         catalog.addCourse(
+             function (err) {
+                 if (err.message.indexOf('duplicate key error index') > -1)
+                     helper.resReturn(helper.createError('Course with the same name is already exist.', 400), res);
+                 else
+                     helper.resReturn(err, res);
+                 //res.status(200).json({result: false, errors: [err.message]});
+             },
 
-                // parameters
-                req.body,
+             // parameters
+             req.body,
 
-                function (course) {
-                    res.status(200).json({result: true, course: course});
-                }
-            );
-        }
-    });
-
+             function (course) {
+                 res.status(200).json({result: true, course: course});
+             }
+         );
+     }
+  }
+ );
 /**
  * POST
  * update a course,
