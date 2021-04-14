@@ -11,10 +11,12 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import { ViewChild , ElementRef} from '@angular/core'
 import {map, startWith} from 'rxjs/operators';
 import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
+import { ToastrService } from 'ngx-toastr';
+import {Courses} from 'src/app/models/courses.model'
 
 
 export interface Fruit {
-  name: string;
+  text: string;
 }
 
 @Component({
@@ -25,11 +27,16 @@ export interface Fruit {
 export class CourseComponent implements OnInit {
 
   slug: string;
+  courses:Courses[];
+  coursesLength = 0
   error:any;
   category:any; 
   baseUrl:string = "http://localhost:3000/api";
   courseTags = [];
   availableTags = [];
+  filterTagsText = [];
+  arrayObjectIndexOf:any;
+  removeObjectFromArray:any;
   orderBy = -1;
   sortBy = 'dateAdded';
   currentPage = 1;
@@ -38,6 +45,12 @@ export class CourseComponent implements OnInit {
   force:any;
   filterTags = [];
   editorForm: FormGroup;
+  orderingOptions = [
+    {id: 'dateAdded.-1', name: 'Newest First'},
+    {id: 'dateAdded.1', name: 'Oldest First'},
+    {id: 'totalEnrollment.-1', name: 'Most Popular'}
+];
+
 
   editorContent: string;
   userId:string;
@@ -57,24 +70,17 @@ export class CourseComponent implements OnInit {
   removable = true;
   fruitCtrl = new FormControl();
   filteredFruits: Observable<string[]>;
-  // fruits: string[] = [''];
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   fruits: Fruit[] = [];  
   httpOptions = {
-    headers: new HttpHeaders({'Content-Type': 'application/json'}),
+    headers: new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'}),
     withCredentials:true
   };
   @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
-  // fromObject:{
-  //   name:string,
-  //   category:string,
-  //   description: string,
-  //   smallDescription:string,
-  //   tags:string
-  // }
+
 
 
   constructor(
@@ -83,16 +89,17 @@ export class CourseComponent implements OnInit {
     private http: HttpClient,
     private courseListService:CourselistService,
     private authService:AuthService,
-    private CoursesService:CoursesService
+    private CoursesService:CoursesService,
+    private toastr: ToastrService,
+
       
       ) {
         this.editorForm = new FormGroup({
           "name":new FormControl(null),
           "description":new FormControl(null),
           "smallDescription":new FormControl(null),
-          //"tags": new FormControl(null),
         })
-
+        //to authenciate the user
         this.authService.getUser()
         .subscribe(
           data=>{
@@ -100,20 +107,15 @@ export class CourseComponent implements OnInit {
             this.user = data['user']
           }
         )
+        
 
-    // this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
-    //   startWith(null),
-    //   map((fruit: string | null) => fruit ? this._filter(fruit) : this.allFruits.slice()));
+
   }
  
 
   ngOnInit() {
    
-
-    
-
-  
-    
+    //this.getCoursesFromThisCategory(this.slug)  
     this.route.params.subscribe(params => {
        this.slug = params['slug']; // (+) converts string 'id' to a number
 
@@ -122,12 +124,18 @@ export class CourseComponent implements OnInit {
     this.http.get(this.baseUrl + '/category/' + this.slug).subscribe({
       next:(data:any)=>{
         this.category = data.category;
+
         // Page.setTitleWithPrefix(this.category.name);
         this.http.get(this.baseUrl + "/category/" + this.category._id + '/courseTags').subscribe((data:any)=> {
           this.courseTags = data.courseTags;
           this.availableTags = data.courseTags;
+         // console.log(this.availableTags)
+          // this.course = data.courseTags['slug']
          // this.initTagFromSearch();
+
         })
+        this.getAllCourse();
+     
       },
       error: error=>{
         this.error = error
@@ -135,34 +143,59 @@ export class CourseComponent implements OnInit {
     })
   }
 
-  // maxLength(e){
-  //   console.log(e)
-  // }
- 
-
-  createNewCourse(){
-    console.log(this.editorForm.value)
-    console.log( this.editorForm.getRawValue()['name'])
-    console.log(this.fruits,typeof(this.fruits))
-    let body = {
-      name:this.editorForm.value.name,
-      category:this.category._id,
-      description:this.editorForm.value.description,
-      smallDescription:this.editorForm.value.smallDescription
+    getAllCourse(){
+      this.courseListService.getAllCourses(this.category._id).subscribe(data=>{
+        this.courses = data['courses']
+        this.coursesLength = this.courses.length
+        // console.log(data)
+        // console.log(this.courses)
+        
+      })
     }
-    //  let params = new HttpParams({
-    //   fromObject:   {
-    //     name:"hed",
-    //      category: "6001afa4f5437537f7ac3700",
-    //      description: "<div>TypeScript is an open-source language which builds on JavaScript, one of the world’s most used tools, by adding static type definitions.</div><div><br></div>",
-    //      smallDescription:"aefe",
-    //      tags:"lkdmflke"
-    //   }
+ 
+  //create a new course
+  createNewCourse(){
+    // console.log(this.editorForm.value)
+    // console.log( this.editorForm.getRawValue()['name'])
+    // console.log(this.fruits,typeof(this.fruits))
 
-    //});
+     let params = new HttpParams({
+      fromObject:   {
+        name:this.editorForm.value.name,
+         category: this.category._id,
+         description: this.editorForm.value.description,
+         smallDescription:this.editorForm.value.smallDescription,
+         tags:JSON.stringify(this.fruits)
+      }
+
+    });
+    console.log(params)
       
-    //  this.http.post('http://localhost:3000/api/courses', body, this.httpOptions)
-    // .subscribe(data=>console.log(data),error=>console.log(error))
+     this.http.post('http://localhost:3000/api/courses', params, this.httpOptions)
+    .subscribe(
+      data=>{
+        console.log(data);
+        this.router.navigate(['/course/' + data['course']['slug'] + '/cid/' + data['course']['_id'] ])
+
+        // this.router.navigate(['/course/' + data['course']['slug'] + '/#/cid/' + data['course']['_id'] + '?new=1'])
+        this.toastr.info('<p>You are now in a newly created course. </p>' +
+        '<p>You can start by customizing this course by uploading introduction picture and video on the edit panel.</p>' +
+        '<p>Collaborate and Annotate on course map and its contents in <i class="ionicons ion-map"></i> <b>Map Tab</b></p>' +
+        '<p>Discuss related topic in <i class="ionicons ion-ios-chatboxes"></i> <b>Discussion Tab.</b></p>' +
+        '<p>Adding widgets on <i class="ionicons ion-stats-bars"></i> <b>Analytics tab</b>.</p>' +
+        '<p>Or wait for your students to enroll in to this course and start collaborating.</p>'
+        , 'New course created',{
+          enableHtml:true,
+          extendedTimeOut: 30000,
+          timeOut: 30000,
+          closeButton	:true,
+          tapToDismiss:false,
+          //toastClass	:'wide'
+        });
+      },error=>{
+        this.toastr.warning("course exists!")
+        console.log(error)
+      })
 
    
     
@@ -179,7 +212,7 @@ export class CourseComponent implements OnInit {
 
     // Add our fruit
     if ((value || '').trim()) {
-      this.fruits.push({name: value.trim()});
+      this.fruits.push({text: value.trim()});
     }
 
     // Reset the input value
@@ -198,62 +231,51 @@ export class CourseComponent implements OnInit {
   }
 
 
-  // selected(event: MatAutocompleteSelectedEvent): void {
-  //   this.fruits.push(event.option.viewValue);
-  //   this.fruitInput.nativeElement.value = '';
-  //   this.fruitCtrl.setValue(null);
-  // }
 
-  // private _filter(value: string): string[] {
-  //   const filterValue = value.toLowerCase();
 
-  //   return this.allFruits.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
-  // }
 
-  initTagFromSearch() {
-    // var tagSearch = $location.search();
-    // if (tagSearch && tagSearch.tags) {
-    //     var tags = tagSearch.tags.split(',');
-    //     if (tags)
-    //         for (var i in tags) {
-    //             var tag = tags[i];
-    //             if ($scope.availableTags)
-    //                 for (var j in $scope.availableTags) {
-    //                     var t = $scope.availableTags[j];
-    //                     if (t.slug == tag)
-    //                         $scope.applyFilter(t, true);
-    //                 }
-    //         }
-    // }
+ 
 
-    this.getCoursesFromThisCategory(this.force);
+      applyFilter(tag){
+        console.log(tag['name'])
+        console.log(tag)
+        this.filterTags.push(tag)
+        console.log(this.filterTags)
+        this.filterTagsText.push(tag.slug);
+        const index: number = this.availableTags.indexOf(tag);
+        if (index !== -1) {
+            this.availableTags.splice(index, 1);
+        }            
+          this.go();
+      }
 
-    // $scope.$watch(function () {
-    //     return $location.search()
-    // }, function (newVal, oldVal) {
-    //     if (newVal && newVal !== oldVal)
-    //         $scope.getCoursesFromThisCategory();
-    // }, true);
-  }
-  getCoursesFromThisCategory(force) {
 
-    this.courseListService.setPageParams({
-        sortBy: this.sortBy,
-        orderBy: this.orderBy,
-        limit: 12,
-        lastPage: false
-    });
+      go(){
+        this.router.navigate(
+          [], 
+          {
+            relativeTo: this.route,
+            queryParams:{tags:this.filterTagsText.join(',')}, 
+            queryParamsHandling: 'merge', // remove to replace all query params by provided
+          });
+          this.getAllCourse();
+      }
 
-    this.courseListService.init(this.category._id, this.filterTags,
-        function (courses) {
-            this.courses = courses;
-            this.coursesLength = courses.length;
-        },
-        function (errors) {
-            console.log(JSON.stringify(errors));
-        }
-        , force
-    );
-};
+      removeFilter(tag){
+       
+        this.availableTags.push(tag)
+        const index: number = this.filterTags.indexOf(tag);
+        if (index !== -1) {
+            this.filterTags.splice(index, 1);
+        } 
+
+        this.go()
+      }
+       
+    
+
+
+
+
 
 }

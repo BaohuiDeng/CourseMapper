@@ -187,26 +187,26 @@ catalog.prototype.addCourse = function (error, params, success) {
                 {_id: course._id},
                 function (crs) {
                     // they giving us the tags in array of slug string.
-                    // if (params.tagSlugs) {
-                    //     // insert all the tags, if it failed, means it is already there
+                    if (params.tagSlugs) {
+                        // insert all the tags, if it failed, means it is already there
 
-                    //     var tc = new TagController();
-                    //     // get all the tags, we need the _ids
-                    //     for (var i in params.tagSlugs) {
-                    //         var tagParam = {
-                    //             name: params.tagSlugs[i],
-                    //             course: crs._id,
-                    //             category: params.category
-                    //         };
+                        var tc = new TagController();
+                        // get all the tags, we need the _ids
+                        for (var i in params.tagSlugs) {
+                            var tagParam = {
+                                name: params.tagSlugs[i],
+                                course: crs._id,
+                                category: params.category
+                            };
 
-                    //         tc.addCourseTag(function (err) {
-                    //                 if (err) debug(err);
-                    //             },
-                    //             tagParam,
-                    //             function () {
-                    //             });
-                    //     }
-                    // }
+                            tc.addCourseTag(function (err) {
+                                    if (err) debug(err);
+                                },
+                                tagParam,
+                                function () {
+                                });
+                        }
+                    }
 
                     success(crs);
                     Plugin.doAction('onAfterCourseCreated', crs);

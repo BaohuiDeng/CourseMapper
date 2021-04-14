@@ -19,6 +19,15 @@ export class CourselistService {
   pageUrl = '';
   baseUrl:string = "http://localhost:3000/api";
 
+
+
+
+  getAllCourses(categoryId:string){
+    return this.http.get(this.baseUrl+'/category/'+categoryId+'/courses')
+  }
+
+
+
   init(categoryId, filterTags, success, error, force) {
     var self = this;
 

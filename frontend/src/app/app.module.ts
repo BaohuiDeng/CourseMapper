@@ -22,6 +22,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { CourseComponent } from './course/course.component';
 import { SignupComponent } from './signup/signup.component';
 import { ProfileComponent } from './profile/profile.component';
+import { PreviewComponent } from './components/preview/preview.component';
 //import { GetCategoriesService} from './services/get-categories.service';
 
 @NgModule({
@@ -36,6 +37,7 @@ import { ProfileComponent } from './profile/profile.component';
     CourseComponent,
     SignupComponent,
     ProfileComponent,
+    PreviewComponent,
     
   ],
   imports: [

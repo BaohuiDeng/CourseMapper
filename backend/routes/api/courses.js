@@ -27,22 +27,22 @@ var await = require('asyncawait/await');
      else {
          var catalog = new Course();
          req.body.userId = req.user._id;
-        //  req.body.userId = "6065d8c1ef42d7048b430e66"
+         // req.body.userId = "6065d8c1ef42d7048b430e66"
       
         //new variable
 
          // format the tags data structure
-        //  if (req.body.tags) {
-        //      // because the data is in {text:the-tag} format. let's just get the values.
-        //      var tagSlugs = [];
-        //     // console.log(req.body.tags);
-        //      var tTags = JSON.parse(req.body.tags);
-        //      console.log(tTags);
-        //      for (var i in tTags) {
-        //          tagSlugs.push(tTags[i]['text']);
-        //      }
-        //      req.body.tagSlugs = tagSlugs;
-        //  }
+         if (req.body.tags) {
+             // because the data is in {text:the-tag} format. let's just get the values.
+             var tagSlugs = [];
+            // console.log(req.body.tags);
+             var tTags = JSON.parse(req.body.tags);
+             console.log(tTags);
+             for (var i in tTags) {
+                 tagSlugs.push(tTags[i]['text']);
+             }
+             req.body.tagSlugs = tagSlugs;
+         }
 
          catalog.addCourse(
              function (err) {
